@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Eventure: Where Events Meet Adventure</title>
+        <!-- Try multiple favicon formats -->
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="Header">
+            <div class="logo-container">
+                <a href="/index.html"><img src="Eventure-modified.png" class="logo"></a>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><button class="nav-btn" onclick="window.location.href='/index.html'"><b>Home</b></button></li>
+                    <li class="dropdown">
+                        <button class="dropbtn"><b>Events▼</b></button>
+                        <div class="dropdown-content">
+                            <a href="/host-event.html">Host Event</a>
+                            <a href="/Events.html">Explore Events</a>
+                        </div>
+                    </li>
+                    <li><button class="nav-btn" onclick="window.location.href='/Profile.html'"><b>Profile</b></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='/aboutus.html'"><b>About Us</b></button></li>
+                </ul>
+            </nav>
+        </div>
+                <!-- After your Header, before your Footer -->
+                <div class="main-content">
+                    <div class="carousel-container">
+                        <h2>Top Events</h2>
+                        <div class="carousel">
+                            <button class="carousel-btn prev">❮</button>
+                            <div class="carousel-track">
+                                <!-- Carousel slides will be populated dynamically from script.js -->
+                            </div>
+                            <button class="carousel-btn next">❯</button>
+                        </div>
+                    </div>
+                </div>
+
+        <div class="Footer">
+            <nav class="footer-menu">
+                <ul>
+                    <li><button class="nav-btn" onclick="window.location.href='/contact.html'"><b>Contact</b></button></li>
+                    <li><button class="nav-btn" onclick="window.location.href='/feedback.html'"><b>Feedback</b></button></li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Add this before closing body tag -->
+        <script src="script.js"></script>
+        <script>
+            async function initializeCarousel() {
+                // Show loading state immediately
+                const carouselTrack = document.querySelector('.carousel-track');
+                carouselTrack.innerHTML = `
+                    <div class="carousel-slide active">
+                        <div class="loading-indicator">Loading events...</div>
+                    </div>
+                `;
+
+                try {
+                    // Start fetch immediately
+                    const response = await fetch("http://localhost:5000/events", {
+                        method: 'GET',
+                        headers: {
+                            'Cache-Control': 'no-cache',  // Prevent caching
+                            'Pragma': 'no-cache'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const events = await response.json();
+                    
+                    // Clear loading indicator
+                    carouselTrack.innerHTML = '';
+                    
+                    // Create all slides at once using a document fragment
+                    const fragment = document.createDocumentFragment();
+                    
+                    events.forEach((event, index) => {
+                        const slide = document.createElement('div');
+                        slide.className = 'carousel-slide';
+                        if (index === 0) slide.classList.add('active');
+                        
+                        slide.innerHTML = `
+                            <img src="${event.image}" alt="${event.title}">
+                            <div class="event-info">
+                                <h3>${event.title}</h3>
+                            </div>
+                        `;
+                        
+                        slide.onclick = () => window.location.href = `/event-details.html?id=${event.id}`;
+                        fragment.appendChild(slide);
+                    });
+                    
+                    // Append all slides at once
+                    carouselTrack.appendChild(fragment);
+
+                    // Set up navigation
+                    const prevBtn = document.querySelector('.prev');
+                    const nextBtn = document.querySelector('.next');
+                    const slides = document.querySelectorAll('.carousel-slide');
+                    let currentIndex = 0;
+
+                    nextBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        slides[currentIndex].classList.remove('active');
+                        currentIndex = (currentIndex + 1) % slides.length;
+                        slides[currentIndex].classList.add('active');
+                    });
+
+                    prevBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        slides[currentIndex].classList.remove('active');
+                        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                        slides[currentIndex].classList.add('active');
+                    });
+
+                } catch (error) {
+                    console.error("Error fetching events:", error);
+                    carouselTrack.innerHTML = `
+                        <div class="carousel-slide active">
+                            <div class="error-message">Error loading events. Please try again later.</div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Initialize as soon as possible
+            document.addEventListener('DOMContentLoaded', initializeCarousel);
+        </script>
+    </body>
+</html>

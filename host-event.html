@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host Event - Eventure</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="Header">
+        <div class="logo-container">
+            <a href="/index.html"><img src="Eventure-modified.png" class="logo"></a>
+        </div>
+        <nav class="nav-menu">
+            <ul>
+                <li><button class="nav-btn" onclick="window.location.href='/index.html'"><b>Home</b></button></li>
+                <li class="dropdown">
+                    <button class="dropbtn"><b>Events▼</b></button>
+                    <div class="dropdown-content">
+                        <a href="/host-event.html">Host Event</a>
+                        <a href="/Events.html">Explore Events</a>
+                    </div>
+                </li>
+                <li><button class="nav-btn" onclick="window.location.href='/Profile.html'"><b>Profile</b></button></li>
+                <li><button class="nav-btn" onclick="window.location.href='/aboutus.html'"><b>About Us</b></button></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="events-grid-container">
+        <h1>Event Management</h1>
+        <h2>Add New Event</h2>
+        <div class="form-group">
+            <input type="text" id="eventTitle" placeholder="Event Name">
+        </div>
+        <div class="form-group">
+            <input type="date" id="eventDate">
+        </div>
+        <div class="form-group">
+            <input type="text" id="eventLocation" placeholder="Location">
+        </div>
+        <div class="form-group">
+            <input type="text" id="eventImage" placeholder="Image URL">
+        </div>
+        <div class="form-group">
+            <input type="text" id="eventTags" placeholder="Tags (comma separated)">
+        </div>
+        <button class="nav-btn" onclick="addEvent()">Add Event</button>
+    </div>
+
+    <div class="Footer">
+        <nav class="footer-menu">
+            <ul>
+                <li><button class="nav-btn" onclick="window.location.href='/contact.html'"><b>Contact</b></button></li>
+                <li><button class="nav-btn" onclick="window.location.href='/feedback.html'"><b>Feedback</b></button></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script src="eventTest.js"></script>
+</body>
+</html>
